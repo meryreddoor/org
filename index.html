@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXIS — Executive Leadership</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img { display: block; }
+
+    :root {
+      --black:   #000000;
+      --card:    #0a0a0a;
+      --card-h:  #111111;
+      --white:   #ffffff;
+      --g1:      #a0a0a0;
+      --g2:      #4a4a4a;
+      --g3:      #1a1a1a;
+      --gold:    #b8922a;
+      --gold-bg: rgba(184,146,42,0.10);
+      --gold-bd: rgba(184,146,42,0.28);
+      --bd:      rgba(255,255,255,0.08);
+      --bd-hi:   rgba(255,255,255,0.14);
+      --f:       'Geist','Inter',-apple-system,sans-serif;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--f);
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 64px;
+      border-bottom: 1px solid var(--bd);
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex; align-items: center;
+    }
+    .nav-inner {
+      max-width: 1280px; width: 100%; margin: 0 auto;
+      padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 17px; font-weight: 500; letter-spacing: -0.02em; color: var(--white); text-decoration: none; }
+    .nav-tag  { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g2); }
+
+    /* ── PAGE ── */
+    .page {
+      max-width: 1280px; margin: 0 auto;
+      padding: 112px 40px 100px;
+    }
+
+    /* ── SECTION HEADER ── */
+    .sec-eye {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.20em; text-transform: uppercase;
+      color: var(--g2); margin-bottom: 16px;
+    }
+    .sec-title {
+      font-size: clamp(26px, 3.2vw, 42px);
+      font-weight: 300; letter-spacing: -0.03em; line-height: 1.1;
+      color: var(--white); margin-bottom: 72px;
+    }
+
+    /* ── ORG ── */
+    .org { display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+    /* ── LEVEL LABELS ── */
+    .level-label {
+      align-self: flex-start;
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--g2); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .level-label::before {
+      content: ''; display: block;
+      width: 16px; height: 1px; background: var(--g2);
+    }
+
+    /* ── TIER 1: CEO ── */
+    .tier-ceo { width: 100%; display: flex; justify-content: center; }
+
+    .card-ceo {
+      width: 340px;
+      background: var(--card);
+      border: 1px solid var(--bd-hi);
+      border-top: 2px solid var(--gold);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .card-ceo:hover { background: var(--card-h); }
+    .card-ceo::after {
+      content: 'CEO';
+      position: absolute; top: 0; right: 0;
+      font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
+      color: var(--gold); background: var(--gold-bg);
+      border-bottom-left-radius: 8px; padding: 4px 10px;
+    }
+
+    /* ── CONNECTOR SVGs ── */
+    .conn { display: block; width: 100%; pointer-events: none; flex-shrink: 0; }
+    #conn1 { height: 56px; }
+    #conn2 { height: 48px; }
+
+    /* ── TIER 2: DIRECT REPORTS ── */
+    .tier-reports {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* ── TIER 3 WRAPPER (CSO sub-reports, centered under CSO) ── */
+    .tier3-wrap {
+      width: 100%;
+      position: relative;
+      height: auto;
+    }
+
+    .tier3-inner {
+      position: absolute;
+      width: calc(100% / 3);
+      /* JS will set left to center under CSO */
+    }
+
+    .tier-sub {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* ── CARDS ── */
+    .card-m, .card-sub {
+      background: var(--card);
+      display: flex; flex-direction: column;
+      transition: background 0.2s;
+    }
+    .card-m   { border-right: 1px solid var(--bd); }
+    .card-m:last-child { border-right: none; }
+    .card-m:hover, .card-sub:hover { background: var(--card-h); }
+
+    .card-sub { border-right: 1px solid var(--bd); }
+    .card-sub:last-child { border-right: none; }
+
+    .card-tbd { opacity: 0.4; }
+
+    /* ── PHOTOS ── */
+    .photo {
+      width: 100%; aspect-ratio: 1 / 1;
+      overflow: hidden; background: var(--g3);
+    }
+    .photo img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 12%;
+      filter: grayscale(15%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1), filter 0.3s;
+    }
+    .card-ceo .photo { aspect-ratio: 4 / 3; }
+
+    .card-ceo:hover .photo img,
+    .card-m:hover   .photo img,
+    .card-sub:hover .photo img { transform: scale(1.04); filter: grayscale(0%); }
+
+    .photo-ph {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; letter-spacing: 0.08em; color: var(--g2);
+    }
+
+    /* ── CARD BODY ── */
+    .body {
+      padding: 16px 16px 18px;
+      display: flex; flex-direction: column; flex: 1;
+    }
+    .card-ceo .body { padding: 22px 24px 26px; }
+
+    .role {
+      display: inline-block;
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-bd);
+      border-radius: 20px;
+      padding: 3px 9px; margin-bottom: 10px;
+      align-self: flex-start; white-space: nowrap;
+    }
+
+    .name {
+      font-size: 12px; font-weight: 500;
+      letter-spacing: -0.015em; color: var(--white);
+      line-height: 1.25; margin-bottom: 10px;
+    }
+    .card-ceo .name { font-size: 18px; font-weight: 400; letter-spacing: -0.025em; margin-bottom: 12px; }
+    .name-tbd { color: var(--g2); font-weight: 400; }
+
+    .rule { height: 1px; background: var(--bd); margin-bottom: 10px; }
+
+    .contribs { list-style: none; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+    .contribs li {
+      font-size: 10.5px; color: var(--g1); line-height: 1.55;
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+    .contribs li::before {
+      content: '—'; color: var(--g2);
+      flex-shrink: 0; font-size: 9px; margin-top: 2px;
+    }
+    .card-ceo .contribs li { font-size: 12px; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .sec-eye   { animation: up 0.6s ease 0s    both; }
+    .sec-title { animation: up 0.6s ease 0.07s both; }
+    .card-ceo  { animation: up 0.6s ease 0.15s both; }
+    .tier-reports .card-m:nth-child(1) { animation: up 0.5s ease 0.30s both; }
+    .tier-reports .card-m:nth-child(2) { animation: up 0.5s ease 0.36s both; }
+    .tier-reports .card-m:nth-child(3) { animation: up 0.5s ease 0.42s both; }
+    .tier-reports .card-m:nth-child(4) { animation: up 0.5s ease 0.48s both; }
+    .tier-reports .card-m:nth-child(5) { animation: up 0.5s ease 0.54s both; }
+    .tier-reports .card-m:nth-child(6) { animation: up 0.5s ease 0.60s both; }
+    .tier-sub   .card-sub:nth-child(1) { animation: up 0.5s ease 0.74s both; }
+    .tier-sub   .card-sub:nth-child(2) { animation: up 0.5s ease 0.80s both; }
+
+    /* ── FOOTER ── */
+    .foot {
+      margin-top: 80px;
+      border-top: 1px solid var(--bd);
+      padding-top: 36px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .foot-logo { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
+    .foot-copy { font-size: 12px; color: var(--g2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .tier-reports { grid-template-columns: repeat(3, 1fr); }
+      .card-m:nth-child(3) { border-right: none; }
+      .card-m:nth-child(4),
+      .card-m:nth-child(5),
+      .card-m:nth-child(6) { border-top: 1px solid var(--bd); }
+      .card-m:nth-child(6) { border-right: none; }
+      .tier3-inner { width: calc(100% / 1.5); }
+    }
+    @media (max-width: 680px) {
+      .page { padding: 96px 20px 60px; }
+      .nav-inner { padding: 0 20px; }
+      .card-ceo { width: 100%; }
+      .tier-reports { grid-template-columns: repeat(2, 1fr); }
+      .tier3-inner { width: 100%; }
+    }
+
+    /* PASSWORD GATE */
+    #gate { position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center; }
+    #gate-box { display:flex;flex-direction:column;align-items:center;gap:20px;width:100%;max-width:300px;padding:0 24px; }
+    #gate-logo { font-size:18px;font-weight:500;letter-spacing:-0.02em;color:#fff;margin-bottom:4px; }
+    #gate-label { font-size:11px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#4a4a4a; }
+    #gate-input { width:100%;padding:12px 16px;background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:var(--f);font-size:14px;letter-spacing:0.08em;outline:none;text-align:center;transition:border-color 0.2s; }
+    #gate-input:focus { border-color:rgba(255,255,255,0.25); }
+    #gate-input.err { border-color:rgba(200,50,50,0.6); }
+    #gate-btn { width:100%;padding:12px;background:#fff;color:#000;border:none;border-radius:8px;font-family:var(--f);font-size:13px;font-weight:500;cursor:pointer;transition:opacity 0.2s; }
+    #gate-btn:hover { opacity:0.85; }
+    #gate-err { font-size:12px;color:#c04040;min-height:16px; }
+  </style>
+</head>
+
+<body>
+
+  <!-- PASSWORD GATE -->
+  <div id="gate">
+    <div id="gate-box">
+      <div id="gate-logo">Nexis</div>
+      <div id="gate-label">Executive Leadership</div>
+      <input id="gate-input" type="password" placeholder="Password" autocomplete="off" />
+      <div id="gate-err"></div>
+      <button id="gate-btn">Access</button>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="https://nexis-demo.vercel.app">Nexis</a>
+      <span class="nav-tag">Organisational Structure · 2026</span>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <p class="sec-eye">Executive leadership</p>
+    <h1 class="sec-title">Who leads Nexis<br>and what they own</h1>
+
+    <div class="org">
+
+      <!-- ── TIER 1: CEO ── -->
+      <p class="level-label">Board level</p>
+      <div class="tier-ceo">
+        <div class="card-ceo" id="ceo-card">
+          <div class="photo">
+            <img src="https://nexis-demo.vercel.app/images/landing/team/alvaro.png"
+                 alt="Álvaro Tomás Tatay" style="object-position:center 8%">
+          </div>
+          <div class="body">
+            <span class="role">Chief Executive Officer</span>
+            <div class="name">Álvaro Tomás Tatay</div>
+            <div class="rule"></div>
+            <ul class="contribs">
+              <li>Drives institutional deal flow and top-tier investor relationships</li>
+              <li>Owns company strategy, capital allocation and final decisions</li>
+              <li>Sets the direction. Closes the deals.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONNECTOR 1 -->
+      <svg id="conn1" class="conn" preserveAspectRatio="none"></svg>
+
+      <!-- ── TIER 2: DIRECT REPORTS ── -->
+      <p class="level-label">Direct reports</p>
+      <div class="tier-reports">
+
+        <div class="card-m" id="m0">
+          <div class="photo">
+            <img src="https://nexis-demo.vercel.app/images/landing/team/victor.png"
+                 alt="Victor Pérez" style="object-position:center 12%">
+          </div>
+          <div class="body">
+            <span class="role">CTO</span>
+            <div class="name">Victor Pérez</div>
+            <div class="rule"></div>
+            <ul class="contribs">
+              <li>Owns the full tech stack — web, infra and smart contracts</li>
+              <li>Built the tokenisation engine from scratch, solo</li>
+              <li>Turns product vision into live, scalable technology</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-m" id="m1">
+          <div class="photo">
+            <img src="https://nexis-demo.vercel.app/images/landing/team/mireia.jpg"
+                 alt="Mireia Valldecabres" style="object-position:center 8%">
+          </div>
+          <div class="body">
+            <span class="role">CMO · CBO · CPO</span>
+            <div class="name">Mireia Valldecabres</div>
+            <div class="rule"></div>
+            <ul class="contribs">
+              <li>Owns brand, product and marketing end-to-end</li>
+              <li>Produces all front-end demos for direct dev handoff</li>
+              <li>Shapes how Nexis looks, speaks and converts</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-m" id="m2">
+          <div class="photo">
+            <img src="https://nexis-demo.vercel.app/images/landing/team/ricardo.png"
+                 alt="Ricardo Branco" style="object-position:center 10%">
+          </div>
+          <div class="body">
+            <span class="role">COO</span>
+            <div class="name">Ricardo Branco</div>
+            <div class="rule"></div>
+            <ul class="contribs">
+              <li>Models, underwrites and scores every deal on the table</li>
+              <li>Frees the CEO to focus exclusively on closing</li>
+              <li>Bridges operational complexity and strategic execution</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-m" id="m3">
+          <div class="photo">
+            <img src="https://nexis-demo.vercel.app/images/landing/team/maria.png"
+                 alt="Maria Roig" style="object-position:center 12%">
+          </div>
+          <div class="body">
+            <span class="role">PMO &amp; Strategy</span>
+            <div class="name">Maria Roig</div>
+            <div class="rule"></div>
+            <ul class="contribs">
+              <li>Converts strategy into execution — clients, providers, delivery</li>
+              <li>Drives market analysis to prioritise where Nexis grows next</li>
+              <li>The operating engine that keeps everything moving</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-m" id="m4">
+          <div class="photo">
+            <img src="https://nexis-demo.vercel.app/images/landing/team/jose.jpg"
+                 alt="José Manzanares" style="object-position:center 10%">
+          </div>
+          <div class="body">
+            <span class="role">CRO</span>
+            <div class="name">José Manzanares</div>
+            <div class="rule"></div>
+            <ul class="contribs">
+              <li>Primary interface with CNMV and UAE regulators</li>
+              <li>Designs compliance across Spanish and ADGM/VARA jurisdictions</li>
+              <li>Keeps Nexis ahead of MiCA and ESMA regulatory risk</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-m" id="m5">
+          <div class="photo">
+            <div class="photo-ph">JD</div>
+          </div>
+          <div class="body">
+            <span class="role">CSO</span>
+            <div class="name">Jose Domingo</div>
+            <div class="rule"></div>
+            <ul class="contribs">
+              <li>Owns retail investor acquisition and first-close conversion</li>
+              <li>Scales sales through influencer networks and digital channels</li>
+              <li>Drives revenue velocity at the HNW retail segment</li>
+            </ul>
+          </div>
+        </div>
+
+      </div><!-- /tier-reports -->
+
+      <!-- CONNECTOR 2 (CSO → sub-reports) -->
+      <svg id="conn2" class="conn" preserveAspectRatio="none"></svg>
+
+      <!-- ── TIER 3: CSO REPORTS ── -->
+      <div class="tier3-wrap">
+        <div class="tier3-inner">
+          <p class="level-label" style="margin-bottom:10px">Reports to CSO</p>
+          <div class="tier-sub">
+
+            <div class="card-sub" id="s0">
+              <div class="body">
+                <span class="role">Growth Lead</span>
+                <div class="name">Alejandro Lara</div>
+                <div class="rule"></div>
+                <ul class="contribs">
+                  <li>Campaigns, Growth &amp; Lead Generation</li>
+                  <li>Manages paid and organic acquisition channels</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card-sub card-tbd" id="s1">
+              <div class="body">
+                <span class="role">Closer</span>
+                <div class="name name-tbd">To be confirmed</div>
+                <div class="rule"></div>
+                <ul class="contribs">
+                  <li>Converts qualified leads into committed investors</li>
+                  <li>Owns final-stage sales pipeline and close rate</li>
+                </ul>
+              </div>
+            </div>
+
+          </div><!-- /tier-sub -->
+        </div>
+      </div>
+
+    </div><!-- /org -->
+
+    <footer class="foot">
+      <span class="foot-logo">Nexis</span>
+      <span class="foot-copy">nexis.fund © 2026</span>
+    </footer>
+
+  </div>
+
+  <script>
+    function draw() {
+      const GOLD = '#b8922a';
+      const LINE = 'rgba(255,255,255,0.12)';
+
+      function mk(svg, tag, a) {
+        const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (const [k,v] of Object.entries(a)) e.setAttribute(k,v);
+        svg.appendChild(e);
+      }
+
+      function mid(id) {
+        const r = document.getElementById(id).getBoundingClientRect();
+        return r.left + (r.right - r.left) / 2;
+      }
+
+      /* ── CENTER tier3-inner under CSO (m5) ── */
+      const wrap   = document.querySelector('.tier3-wrap');
+      const inner  = document.querySelector('.tier3-inner');
+      const wrapR  = wrap.getBoundingClientRect();
+      const csoCx  = mid('m5');
+      const iW     = inner.offsetWidth;
+      const left   = csoCx - wrapR.left - iW / 2;
+      inner.style.left = left + 'px';
+      wrap.style.height = inner.offsetHeight + 'px';
+
+      /* ── CONNECTOR 1: CEO → direct reports ── */
+      const c1   = document.getElementById('conn1');
+      const r1   = c1.getBoundingClientRect();
+      const W1   = r1.width, H1 = r1.height;
+      c1.setAttribute('viewBox', `0 0 ${W1} ${H1}`);
+      c1.setAttribute('width', W1);
+      c1.innerHTML = '';
+
+      const ceoCx = mid('ceo-card') - r1.left;
+      const barY1 = H1 * 0.55;
+      const cols  = ['m0','m1','m2','m3','m4','m5'].map(id => mid(id) - r1.left);
+
+      mk(c1,'line',{ x1:ceoCx, y1:0, x2:ceoCx, y2:barY1, stroke:LINE,'stroke-width':'1' });
+      mk(c1,'line',{ x1:cols[0], y1:barY1, x2:cols[5], y2:barY1, stroke:LINE,'stroke-width':'1' });
+      cols.forEach(x => {
+        mk(c1,'line',  { x1:x, y1:barY1, x2:x, y2:H1, stroke:LINE,'stroke-width':'1' });
+        mk(c1,'circle',{ cx:x, cy:barY1, r:'2.5', fill:GOLD });
+      });
+      mk(c1,'circle',{ cx:ceoCx, cy:0,    r:'2.5', fill:GOLD });
+      mk(c1,'circle',{ cx:ceoCx, cy:barY1, r:'3.5', fill:GOLD });
+
+      /* ── CONNECTOR 2: CSO → sub-reports ── */
+      const c2  = document.getElementById('conn2');
+      const r2  = c2.getBoundingClientRect();
+      const W2  = r2.width, H2 = r2.height;
+      c2.setAttribute('viewBox', `0 0 ${W2} ${H2}`);
+      c2.setAttribute('width', W2);
+      c2.innerHTML = '';
+
+      const csoCxConn = mid('m5') - r2.left;
+      const s0cx      = mid('s0') - r2.left;
+      const s1cx      = mid('s1') - r2.left;
+      const barY2     = H2 * 0.55;
+
+      mk(c2,'line',{ x1:csoCxConn, y1:0,    x2:csoCxConn, y2:barY2, stroke:LINE,'stroke-width':'1' });
+      mk(c2,'line',{ x1:s0cx,  y1:barY2, x2:s1cx,  y2:barY2, stroke:LINE,'stroke-width':'1' });
+      [s0cx, s1cx].forEach(x => {
+        mk(c2,'line',  { x1:x, y1:barY2, x2:x, y2:H2, stroke:LINE,'stroke-width':'1' });
+        mk(c2,'circle',{ cx:x, cy:barY2, r:'2.5', fill:GOLD });
+      });
+      mk(c2,'circle',{ cx:csoCxConn, cy:0,    r:'2.5', fill:GOLD });
+      mk(c2,'circle',{ cx:csoCxConn, cy:barY2, r:'3.5', fill:GOLD });
+
+      /* re-set height after inner is fully rendered */
+      wrap.style.height = inner.offsetHeight + 'px';
+    }
+
+    window.addEventListener('load',   () => setTimeout(draw, 80));
+    window.addEventListener('resize', draw);
+  </script>
+
+  <script>
+    (function(){
+      var gate=document.getElementById("gate");
+      var inp=document.getElementById("gate-input");
+      var err=document.getElementById("gate-err");
+      var btn=document.getElementById("gate-btn");
+      function attempt(){
+        if(inp.value==="org2026"){gate.style.display="none";}
+        else{inp.classList.add("err");err.textContent="Incorrect password";inp.value="";setTimeout(function(){inp.classList.remove("err");err.textContent="";},2000);}
+      }
+      btn.addEventListener("click",attempt);
+      inp.addEventListener("keydown",function(e){if(e.key==="Enter")attempt();});
+    })();
+  </script>
+
+</body>
+</html>
